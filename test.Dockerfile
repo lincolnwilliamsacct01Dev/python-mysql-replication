@@ -27,3 +27,9 @@ COPY setup.py setup.py
 COPY pymysqlreplication pymysqlreplication
 
 RUN pip install .
+
+# Security: Create non-root user and set ownership of application files
+# This prevents the container from running as root, reducing security risks
+RUN useradd -U -u 1000 appuser && chown -R 1000:1000 /.mariadb /README.md /setup.py /pymysqlreplication
+# Switch to non-root user for runtime
+USER 1000
